@@ -10,7 +10,7 @@ import {
 
 const Textarea = React.forwardRef(
   (
-    { id, children, ...props }: InputWithComposition<HTMLTextAreaElement>,
+    { id, ...props }: InputWithComposition<HTMLTextAreaElement>,
     ref?: React.Ref<HTMLTextAreaElement>
   ): JSX.Element => {
     const validationProps =
@@ -21,7 +21,7 @@ const Textarea = React.forwardRef(
         : {}
 
     return (
-      <FormTextareaWrapper expanded={Boolean(children)}>
+      <FormTextareaWrapper expanded={Boolean(props.value)}>
         <FormInputWrapper>
           <FormTextarea
             as="textarea"

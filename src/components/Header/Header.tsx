@@ -4,7 +4,7 @@ import { HeaderWrappper, HeaderTitle } from './Header.styled'
 function Header() {
   return (
     <HeaderWrappper>
-      <HeaderTitle>Feedback</HeaderTitle>
+      <HeaderTitle data-testid="header-title">Feedback</HeaderTitle>
     </HeaderWrappper>
   )
 }

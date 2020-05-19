@@ -20,6 +20,7 @@ export enum FormActionTypes {
   ChangeInput = 'ChangeInput',
   Submit = 'Submit',
   SetErrors = 'SetErrors',
+  Reset = 'Reset',
 }
 
 export type FormAction = {
@@ -46,4 +47,5 @@ export type UseForm<T> = {
   errors: FormErrors<T>
   onFieldChange: (event: React.ChangeEvent<any>) => void
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<any>
+  resetForm: () => void
 }

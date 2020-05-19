@@ -27,6 +27,12 @@ function useForm<T>(fields: T, { validation }: FormOptions<T>): UseForm<T> {
           errors: action.payload,
         }
 
+      case FormActionTypes.Reset:
+        return {
+          ...state,
+          fields,
+        }
+
       default:
         return state
     }
@@ -97,7 +103,10 @@ function useForm<T>(fields: T, { validation }: FormOptions<T>): UseForm<T> {
         }
       }
 
-      return Promise.resolve()
+      return Promise.resolve(state.fields)
+    },
+    resetForm() {
+      dispatch({ type: FormActionTypes.Reset, payload: {} })
     },
   }
 }

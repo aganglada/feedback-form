@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Header from '../components/Header/Header'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 import BaseStyles from '../core/styled/base'
 import { space } from './styled/variables'
 import { addPx } from './styled/utils'

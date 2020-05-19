@@ -8,6 +8,7 @@ import {
 
 type Props = {
   value: number
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const ratings: { [k: string]: string } = {
@@ -27,15 +28,13 @@ function Rating(props: Props): JSX.Element {
           <React.Fragment key={rating}>
             <RatingStar
               type="radio"
-              id={`first-rate-${rating}`}
+              id={`rate-${rating}`}
               name="rating"
               value={rating}
-              defaultChecked={String(props.value) === rating}
+              checked={String(props.value) === rating}
+              onChange={props.onChange}
             />
-            <RatingLabel
-              htmlFor={`first-rate-${rating}`}
-              title={ratings[rating]}
-            >
+            <RatingLabel htmlFor={`rate-${rating}`} title={ratings[rating]}>
               {rating} star
             </RatingLabel>
           </React.Fragment>
