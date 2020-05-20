@@ -50,7 +50,7 @@ function Feedback(): JSX.Element {
   return (
     <Layout>
       <FeedbackWrapper>
-        <FeedbackForm onSubmit={submit} noValidate>
+        <FeedbackForm onSubmit={submit} data-testid="feedback-form" noValidate>
           <FeedbackFileds>
             <FeedbackFiledsLegend>Feedback fields</FeedbackFiledsLegend>
             <Input

@@ -53,10 +53,7 @@ function useForm<T>(fields: T, { validation }: FormOptions<T>): UseForm<T> {
         type: FormActionTypes.ChangeInput,
         payload: {
           name: event.target.name,
-          value:
-            event.target.type === 'checkbox'
-              ? event.target.checked
-              : event.target.value,
+          value: event.target.value,
         },
       })
     },

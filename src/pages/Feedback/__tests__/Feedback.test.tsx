@@ -1,9 +1,18 @@
 import * as React from 'react'
-import { render, screen, waitFor } from '@test/utils'
+import { render, screen, waitFor, userEvent } from '@test/utils'
 import { CommentProvider } from '../../../core/context/comment'
 import Feedback from '../Feedback'
 
-test('Header renders correctly', async () => {
+test('Feedback to throw an error if it is render outside a CommentProvider', () => {
+  console.error = jest.fn()
+
+  expect(() => render(<Feedback />)).toThrowError(
+    /useComment must be used within CommentProvider/
+  )
+  expect(console.error).toHaveBeenCalled()
+})
+
+test('Feedback renders and functions correctly', async () => {
   console.warn = jest.fn()
   render(
     <React.Suspense fallback="loading...">
@@ -41,6 +50,65 @@ test('Header renders correctly', async () => {
   expect(comment).toBeInTheDocument()
   expect(submit).toBeInTheDocument()
 
-  // TODO: Continue test
-  screen.debug(document.body)
+  expect(screen.getByText(/alejandro garcia anglada/i)).toBeInTheDocument()
+  expect(screen.getByText(/emily arack/i)).toBeInTheDocument()
+  expect(screen.getByText(/tez ilyas/i)).toBeInTheDocument()
+
+  userEvent.click(submit)
+
+  expect(screen.getByText(/name is required/i)).toBeInTheDocument()
+  expect(screen.getByText(/email is required/i)).toBeInTheDocument()
+  expect(screen.getByText(/comment is required/i)).toBeInTheDocument()
+
+  userEvent.type(name, 'test user')
+
+  userEvent.click(submit)
+
+  expect(screen.queryByText(/name is required/i)).not.toBeInTheDocument()
+  expect(screen.getByText(/email is required/i)).toBeInTheDocument()
+  expect(screen.getByText(/comment is required/i)).toBeInTheDocument()
+
+  userEvent.type(email, 'test.user@gmail')
+
+  userEvent.click(submit)
+
+  expect(screen.queryByText(/name is required/i)).not.toBeInTheDocument()
+  expect(screen.queryByText(/email is required/i)).not.toBeInTheDocument()
+  expect(
+    screen.getByText(/Email should be valid \(eg. example@domain.com\)/i)
+  ).toBeInTheDocument()
+  expect(screen.getByText(/comment is required/i)).toBeInTheDocument()
+
+  userEvent.type(email, '.com')
+  userEvent.click(rating3star)
+
+  userEvent.click(submit)
+
+  expect(screen.queryByText(/name is required/i)).not.toBeInTheDocument()
+  expect(screen.queryByText(/email is required/i)).not.toBeInTheDocument()
+  expect(
+    screen.queryByText(/email should be valid \(eg. example@domain.com\)/i)
+  ).not.toBeInTheDocument()
+  expect(screen.getByText(/comment is required/i)).toBeInTheDocument()
+
+  userEvent.type(comment, 'Love the app, thank you')
+
+  userEvent.click(submit)
+
+  expect(screen.queryByText(/name is required/i)).not.toBeInTheDocument()
+  expect(screen.queryByText(/email is required/i)).not.toBeInTheDocument()
+  expect(
+    screen.queryByText(/email should be valid \(eg. example@domain.com\)/i)
+  ).not.toBeInTheDocument()
+  expect(screen.queryByText(/comment is required/i)).not.toBeInTheDocument()
+
+  await waitFor(() => {
+    expect(screen.getAllByTestId('comment-image')).toHaveLength(4)
+  })
+
+  expect(
+    screen.getByText(/test user \(test.user@gmail.com\)/i)
+  ).toBeInTheDocument()
+  expect(screen.getByText(/love the app, thank you/i)).toBeInTheDocument()
+  expect(screen.getByText(/rating: 3/i)).toBeInTheDocument()
 })

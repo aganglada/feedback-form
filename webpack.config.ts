@@ -2,6 +2,7 @@ import * as path from 'path'
 import * as webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 
+const isProd = process.env.NODE_ENV === 'production'
 const config: webpack.Configuration = {
   entry: {
     client: './src/index.tsx',
@@ -9,7 +10,7 @@ const config: webpack.Configuration = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: 'dist/',
+    publicPath: isProd ? '' : 'dist/',
   },
   module: {
     rules: [
@@ -39,7 +40,12 @@ const config: webpack.Configuration = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Feedback Form',
+      template: 'index.html',
+    }),
+  ],
 }
 
 export default config
